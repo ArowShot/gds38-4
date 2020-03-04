@@ -5,6 +5,7 @@ var {ensureAuthenticated} = require("../helper/auth")
 
 //load game model
 var Game = require('../models/Game');
+var User = require('../models/User');
 
 //Game Entry CRUD route
 
@@ -13,6 +14,36 @@ router.get('/games', function(req, res){
         console.log("Fetch Route ");
         console.log(games);
         res.render('games',{
+            games:games
+        });
+    });
+});
+
+router.get('/games/user/:user', async function(req, res){
+    try {
+        var user = await User.findById(req.params.user)
+        Game.find({user: user}).populate('user', 'name').then(function(games){
+            console.log("Fetch Route ");
+            console.log(games);
+            res.render('games',{
+                filter: 'Viewing games owned by ' + user.name,
+                games:games
+            });
+        });
+    } catch(e) {
+        res.render('games',{
+            filter: 'Viewing games owned by ' + user,
+            games:[]
+        });
+    }
+});
+
+router.get('/games/game/:game', function(req, res){
+    Game.find({title: req.params.game}).populate('user', 'name').then(function(games){
+        console.log("Fetch Route ");
+        console.log(games);
+        res.render('games',{
+            filter: 'Viewing all copies of ' + req.params.game,
             games:games
         });
     });

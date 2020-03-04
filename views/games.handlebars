@@ -1,9 +1,16 @@
+<h1>Public game list</h1>
+{{#if filter}}
+<p>
+    {{filter}}<br/>
+    <a href="/game/games">View all games</a>
+</p>
+{{/if}}
 {{#each games}}
 <div class="card card-body">
-    <h4>{{title}}</h4>
+    <h4><a href="/game/games/game/{{title}}">{{title}}</a></h4>
     <p>{{price}}</p>
     <p>{{description}}</p>
-    <p>Added by {{user.name}}</p>
+    <p>Added by <a href="/game/games/user/{{user._id}}">{{user.name}}</a></p>
     </form>
 </div>
 {{else}}
