@@ -26,7 +26,7 @@ router.post('/login', function(req,res,next){
     })(req,res,next);
 });
 
-router.post('/register', function(req,res){
+router.post('/register', async function(req,res){
     console.log(req.body);
     var errors = [];
 
@@ -45,30 +45,21 @@ router.post('/register', function(req,res){
             password2:req.body.password2
         });
     }else{
-        var newUser = new User({
-            name:req.body.name,
-            email:req.body.email,
-            password:req.body.password,
-        });
-
-        bcrypt.genSalt(10, function(err, salt){
-            bcrypt.hash(newUser.password, salt, function(err, hash){
-                if(err)throw err;
-                newUser.password = hash;
-                newUser.save().then(function(user){
-                    res.redirect('/users/login');
-                }).catch(function(err){
-                    console.log(err);
-                    errors.push({err:err});
-                    res.render('users/register',{
-                        errors:errors,
-                    });
-                    return;
-                });
+        try {
+            var newUser = await User.create({
+                name:req.body.name,
+                email:req.body.email,
+                password:bcrypt.hashSync(req.body.password),
             });
-        });
-
-        
+            res.redirect('/users/login');
+        } catch(err) {
+            console.log(err);
+            errors.push({err:err});
+            res.render('users/register',{
+                errors:errors,
+            });
+            return;
+        }
     }
 });
 

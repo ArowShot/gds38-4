@@ -85,7 +85,7 @@ router.post('/gameentry', ensureAuthenticated ,function(req,res){
         new Game(newUser).save().then(function(games){
            //Saves game and redirects to game page
            req.flash('success_msg', 'Game Added Successfully');
-           res.redirect('games');
+           res.redirect('editgames');
        });
     }
 
