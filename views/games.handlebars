@@ -1,0 +1,11 @@
+{{#each games}}
+<div class="card card-body">
+    <h4>{{title}}</h4>
+    <p>{{price}}</p>
+    <p>{{description}}</p>
+    <p>Added by {{user.name}}</p>
+    </form>
+</div>
+{{else}}
+<p>No Game Entries Found</p>
+{{/each}}

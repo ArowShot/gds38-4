@@ -4,12 +4,21 @@ var router = express.Router();
 var {ensureAuthenticated} = require("../helper/auth")
 
 //load game model
-require('../models/Game');
-var Game = mongoose.model('games');
+var Game = require('../models/Game');
 
 //Game Entry CRUD route
 
-router.get('/games', ensureAuthenticated , function(req, res){
+router.get('/games', function(req, res){
+    Game.find().populate('user', 'name').then(function(games){
+        console.log("Fetch Route ");
+        console.log(games);
+        res.render('games',{
+            games:games
+        });
+    });
+});
+
+router.get('/editgames', ensureAuthenticated , function(req, res){
     Game.find({user:req.user.id}).then(function(games){
         console.log("Fetch Route ");
         console.log(games);
@@ -17,7 +26,6 @@ router.get('/games', ensureAuthenticated , function(req, res){
             games:games
         });
     });
-    
 });
 
 router.get('/gameentry/gameentryadd', ensureAuthenticated, function(req, res){
@@ -31,7 +39,7 @@ router.get('/gameentry/gameentryedit/:id', ensureAuthenticated , function(req, r
 
         if(game.user != req.user.id){
             req.flash('error_msg', 'Not Authorized');
-            res.redirect('/game/games');
+            res.redirect('/game/editgames');
         }
         else{
            res.render('gameentry/gameentryedit',{
@@ -95,7 +103,7 @@ router.put('/gameedit/:id', ensureAuthenticated , function(req,res){
 
         game.save().then(function(game){
             req.flash('success_msg', 'Game Edited Successfully');
-            res.redirect('/game/games');
+            res.redirect('/game/editgames');
         });
 
     });
@@ -106,7 +114,7 @@ router.delete('/gamedelete/:id', ensureAuthenticated, function(req,res){
         _id:req.params.id
     }).then(function(){
         req.flash('success_msg', 'Game Deleted Successfully');
-        res.redirect('/game/games');
+        res.redirect('/game/editgames');
     });
 } );
 

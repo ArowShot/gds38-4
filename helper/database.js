@@ -1,7 +1,7 @@
 if(process.env.NODE_ENV === "production"){
     module.exports ={
         //connection to cloud mongodb server 
-        mongoURI:"mongodb+srv://jordan:jordan11@cluster0-ezrcu.mongodb.net/test?retryWrites=true&w=majority"
+        mongoURI:process.env.MONGODB_URI
     }
 }
 else{

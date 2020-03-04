@@ -4,9 +4,8 @@ var bcrypt = require('bcryptjs');
 var passport = require('passport');
 var router = express.Router();
 
-//load game model
-require('../models/User');
-var User = mongoose.model('users');
+//load user model
+var User = require('../models/User');
 
 //Routes for Sign in
 router.get('/login', function(req,res){
@@ -21,7 +20,7 @@ router.get('/register', function(req,res){
 
 router.post('/login', function(req,res,next){
     passport.authenticate('local', {
-        successRedirect:'/game/games',
+        successRedirect:'/game/editgames',
         failureRedirect:'/users/login',
         failureFlash: true
     })(req,res,next);

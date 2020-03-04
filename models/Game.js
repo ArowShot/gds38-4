@@ -12,10 +12,10 @@ var GameSchema = new Schema({
         type:String
     },
     user:{
-        type:String,
-        required:true
+        type: Schema.Types.ObjectId,
+        ref: 'users'
     }
 });
 
-mongoose.model('games', GameSchema);
+module.exports = mongoose.model('games', GameSchema);
 
